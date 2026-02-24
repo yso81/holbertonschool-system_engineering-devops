@@ -1,0 +1,31 @@
+`
++-------------------+      +-------------------------------------------------+
+|     User's        |      |                     DNS                         |
+|     Browser       |----->|     (Resolves foobar.com to LB IP 8.8.8.8)    |
++-------------------+      +-------------------------------------------------+
+         |                                       |
+         | (HTTP/HTTPS Request)                  |
+         V                                       V
++-----------------------------------------------------------------------------+
+|                     ** LOAD BALANCER (HAProxy) - IP: 8.8.8.8 **             |
+|                  (Distributes traffic to Server 1 & Server 2)               |
++-----------------------------------------------------------------------------+
+         |                                       | (Round-Robin Distribution)
+         |---------------------------------------|
+         V                                       V
++---------------------+               +---------------------+
+|   ** SERVER 1 **     |               |   ** SERVER 2 **     |
+|   (IP: 10.0.0.1)      |               |   (IP: 10.0.0.2)      |
+|---------------------|               |---------------------|
+| 1. Web Server (Nginx) |               | 1. Web Server (Nginx) |
+| 2. Application Server |               | 2. Application Server |
+|    (App Files)        |               |    (App Files)        |
+|---------------------|               |---------------------|
+|       (DB Read/Write) |               |       (DB Read/Write) |
+|---------------------|               |---------------------|
+| ** DATABASE (MySQL) ** |<------------->| ** DATABASE (MySQL) ** |
+|   (Primary/Replica    |               |   (Primary/Replica    |
+|    Cluster - split    |               |    Cluster - split    |
+|    across servers)    |               |    across servers)    |
++---------------------+               +---------------------+
+`
